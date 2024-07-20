@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ArticleCentral</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="{{ url_for('static', filename='images/Icon-titre.jpeg') }}" width="80" height="80">
+            <h1>ArticleCentral</h1>
+        </div>
+        <form method="POST" action="/add_feed">
+            <input type="text" name="feed_url" placeholder="Ajouter un flux RSS" required>
+            <button type="submit" class="btn btn-primary">Ajouter</button>
+        </form>
+        <a href="{{ url_for('read_later_articles') }}" class="button-page">
+            <i class="fas fa-clock"></i>Voir les articles à lire plus tard
+        </a>
+        <a href="{{ url_for('saved_articles') }}" class="button-page">
+            <i class="fas fa-save"></i>Voir les articles enregistrés
+        </a>
+        {% for feed in feeds %}
+            <div class="feed">
+                <h2>Flux RSS : {{ feed.url }}</h2>
+                <ul>
+                    {% for article in feed.articles %}
+                        <div class="article" id="article-{{ article.id }}">
+                            <a href="{{ article.link}}" target="_blank" class="lien">{{ article.title }}</a>
+                            <div class="action">
+                                <span class="article-date">
+                                    {% if article.published_date %}
+                                        ({{ article.published_date.strftime('%Y-%m-%d %H:%M') }})
+                                    {% else %}
+                                        (Date inconnue)
+                                    {% endif %}
+                                </span>
+                                <a href="{{ url_for('read_later', article_id=article.id) }}" class="icon-button">
+                                    <i class="fas fa-clock"></i>
+                                </a>
+                                <a href="{{ url_for('save', article_id=article.id) }}" class="icon-button">
+                                    <i class="fa-solid fa-floppy-disk"></i>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
+
+
