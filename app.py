@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from flask import Flask, request, render_template, redirect, url_for
 import feedparser
 from flask_sqlalchemy import SQLAlchemy
@@ -50,6 +52,7 @@ def add_feed():
             published_date=published_date,
             feed=new_feed
         )
+
         db.session.add(new_article)
         print(f"Added article : {entry.title}")
     db.session.commit()
